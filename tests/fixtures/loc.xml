@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<zs:searchRetrieveResponse xmlns:zs="http://www.loc.gov/zing/srw/"><zs:version>1.1</zs:version><zs:numberOfRecords>2</zs:numberOfRecords><zs:records><zs:record><zs:recordSchema>mods</zs:recordSchema><zs:recordPacking>xml</zs:recordPacking><zs:recordData><mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.8" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-8.xsd">
+  <titleInfo>
+    <title>Project Hail Mary</title>
+    <subTitle>a novel</subTitle>
+  </titleInfo>
+  <name type="personal" usage="primary">
+    <namePart>Weir, Andy,</namePart>
+    <role>
+      <roleTerm type="text">author</roleTerm>
+    </role>
+  </name>
+  <typeOfResource>text</typeOfResource>
+  <genre authority="rdacontent">text</genre>
+  <genre authority="gsafd">Science fiction.</genre>
+  <originInfo>
+    <place>
+      <placeTerm type="code" authority="marccountry">nyu</placeTerm>
+    </place>
+    <dateIssued encoding="marc">2021</dateIssued>
+    <issuance>monographic</issuance>
+    <edition>First edition.</edition>
+  </originInfo>
+  <originInfo eventType="publication">
+    <place>
+      <placeTerm type="text">New York :</placeTerm>
+    </place>
+    <agent>
+      <namePart>Ballantine Books,</namePart>
+      <role>
+        <roleTerm>publisher</roleTerm>
+      </role>
+    </agent>
+    <dateIssued>[2021]</dateIssued>
+  </originInfo>
+  <language>
+    <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+  </language>
+  <physicalDescription>
+    <form authority="marccategory">electronic resource</form>
+    <form authority="marcsmd">remote</form>
+    <form type="media" authority="rdamedia">computer</form>
+    <form type="carrier" authority="rdacarrier">online resource</form>
+    <extent>1 online resource</extent>
+  </physicalDescription>
+  <note type="statement of responsibility">Andy Weir.</note>
+  <note>Description based on print version record and CIP data provided by publisher; resource not viewed.</note>
+  <classification authority="lcc">PS3623.E4324494</classification>
+  <classification authority="ddc" edition="23">813/.6</classification>
+  <relatedItem type="otherFormat" otherType="Print version:" displayLabel="Print version:">
+    <titleInfo>
+      <title>Project Hail Mary</title>
+    </titleInfo>
+    <originInfo>
+      <publisher>New York : Ballantine Books, [2021]</publisher>
+      <edition>First edition.</edition>
+    </originInfo>
+    <identifier type="isbn">9780593135204</identifier>
+    <identifier type="local">(DLC) 2020015821</identifier>
+    <name>
+      <namePart>Weir, Andy.</namePart>
+    </name>
+  </relatedItem>
+  <identifier type="isbn">9780593135211</identifier>
+  <identifier type="isbn" invalid="yes">9780593135204</identifier>
+  <identifier type="lccn">2020015822</identifier>
+  <recordInfo>
+    <descriptionStandard>rda</descriptionStandard>
+    <recordContentSource authority="marcorg">DLC</recordContentSource>
+    <recordCreationDate encoding="marc">200403</recordCreationDate>
+    <recordChangeDate encoding="iso8601">20250607101431.0</recordChangeDate>
+    <recordIdentifier>21489572</recordIdentifier>
+    <recordOrigin>Converted from MARCXML to MODS version 3.8 using MARC21slim2MODS3-8_XSLT1-0.xsl
+				(Revision 1.172 20230208)</recordOrigin>
+    <languageOfCataloging>
+      <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+    </languageOfCataloging>
+  </recordInfo>
+</mods></zs:recordData><zs:recordPosition>1</zs:recordPosition></zs:record><zs:record><zs:recordSchema>mods</zs:recordSchema><zs:recordPacking>xml</zs:recordPacking><zs:recordData><mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.8" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-8.xsd">
+  <titleInfo>
+    <title>Project Hail Mary</title>
+    <subTitle>a novel</subTitle>
+  </titleInfo>
+  <name type="personal" usage="primary">
+    <namePart>Weir, Andy,</namePart>
+    <role>
+      <roleTerm type="text">author</roleTerm>
+    </role>
+  </name>
+  <typeOfResource>text</typeOfResource>
+  <genre authority="rdacontent">text</genre>
+  <genre authority="gsafd">Science fiction.</genre>
+  <originInfo>
+    <place>
+      <placeTerm type="code" authority="marccountry">nyu</placeTerm>
+    </place>
+    <dateIssued encoding="marc">2021</dateIssued>
+    <issuance>monographic</issuance>
+    <edition>First edition.</edition>
+  </originInfo>
+  <originInfo eventType="publication">
+    <place>
+      <placeTerm type="text">New York :</placeTerm>
+    </place>
+    <agent>
+      <namePart>Ballantine Books,</namePart>
+      <role>
+        <roleTerm>publisher</roleTerm>
+      </role>
+    </agent>
+    <dateIssued>[2021]</dateIssued>
+  </originInfo>
+  <language>
+    <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+  </language>
+  <physicalDescription>
+    <form authority="marcform">print</form>
+    <form type="media" authority="rdamedia">unmediated</form>
+    <form type="carrier" authority="rdacarrier">volume</form>
+    <extent>476 pages ; 25 cm</extent>
+  </physicalDescription>
+  <note type="statement of responsibility">Andy Weir.</note>
+  <classification authority="lcc">PS3623.E4324494 P76 2021</classification>
+  <classification authority="ddc" edition="23">813/.6</classification>
+  <relatedItem type="otherFormat" otherType="Online version:" displayLabel="Online version:">
+    <titleInfo>
+      <title>Project Hail Mary</title>
+    </titleInfo>
+    <originInfo>
+      <publisher>New York : Ballantine Books, [2021]</publisher>
+      <edition>First edition</edition>
+    </originInfo>
+    <identifier type="isbn">9780593135211</identifier>
+    <identifier type="local">(DLC) 2020015822</identifier>
+    <name>
+      <namePart>Weir, Andy.</namePart>
+    </name>
+  </relatedItem>
+  <identifier type="isbn">9780593135204</identifier>
+  <identifier type="isbn">9780593135228</identifier>
+  <identifier type="isbn" invalid="yes">9780593135211</identifier>
+  <identifier type="lccn">2020015821</identifier>
+  <recordInfo>
+    <descriptionStandard>rda</descriptionStandard>
+    <recordContentSource authority="marcorg">DLC</recordContentSource>
+    <recordCreationDate encoding="marc">200403</recordCreationDate>
+    <recordChangeDate encoding="iso8601">20250630014049.1</recordChangeDate>
+    <recordIdentifier>21489409</recordIdentifier>
+    <recordOrigin>Converted from MARCXML to MODS version 3.8 using MARC21slim2MODS3-8_XSLT1-0.xsl
+				(Revision 1.172 20230208)</recordOrigin>
+    <languageOfCataloging>
+      <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+    </languageOfCataloging>
+  </recordInfo>
+</mods></zs:recordData><zs:recordPosition>2</zs:recordPosition></zs:record></zs:records><zs:echoedSearchRetrieveRequest><zs:version>1.1</zs:version><zs:query>bath.isbn=9780593135204</zs:query><zs:maximumRecords>5</zs:maximumRecords><zs:recordPacking>xml</zs:recordPacking><zs:recordSchema>mods</zs:recordSchema></zs:echoedSearchRetrieveRequest></zs:searchRetrieveResponse>

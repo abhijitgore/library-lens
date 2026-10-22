@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Library Lens — Settings</title><link rel="stylesheet" href="settings.css"><script type="module" src="settings.js"></script></head><body><main><header><img class="brand-mark" src="icons/book-48.png" alt="" width="40" height="40"><div><h1>Library Lens</h1><p class="brand-tagline">Find books across your libraries.</p><p class="brand-version">Settings · <span id="version">…</span></p></div></header>
+    <section aria-labelledby="libraries-heading">
+      <h2 id="libraries-heading">Your libraries</h2>
+      <p>Enter a ZIP code to find supported public library systems nearby. Choose up to three where you have a card.</p>
+      <form id="library-search" class="zip-search">
+        <label for="zip-code">ZIP code</label>
+        <input id="zip-code" inputmode="numeric" autocomplete="off" maxlength="5" pattern="[0-9]{5}" placeholder="5-digit ZIP" required>
+        <button id="find-libraries" type="submit">Find libraries</button>
+      </form>
+      <p class="fine-print">Distances use the nearest branch and are approximate. ZIP areas do not determine library card eligibility.</p>
+      <fieldset id="library-list" hidden><legend>Choose up to 3 libraries</legend></fieldset>
+      <div class="save-row"><button id="save-libraries" type="button" disabled>Save selection</button><span id="library-status" role="status" aria-live="polite"></span></div>
+    </section>
+    <section aria-labelledby="preferred-format-heading">
+      <h2 id="preferred-format-heading">Preferred reading format</h2>
+      <p>Show this format first in library results. Other available formats remain listed.</p>
+      <label for="preferred-format">Search preference</label>
+      <select id="preferred-format" aria-describedby="preferred-format-status"><option value="print">Print</option><option value="ebook">eBook</option><option value="audiobook">Audiobook</option></select>
+      <p id="preferred-format-status" role="status" aria-live="polite">Default: Print</p>
+    </section>
+    <section aria-labelledby="privacy-heading">
+      <h2 id="privacy-heading">Privacy</h2>
+      <p>Library Lens supports selected Seattle-area and Bay Area libraries. Use a single book page on amazon.com, bn.com (Barnes &amp; Noble), or goodreads.com.</p>
+      <p>Sign in to the source website and your selected library websites before use. Keep those sessions active. You complete holds and purchase requests on the official library website. It can ask you to sign in again.</p>
+      <p>The extension does not collect or store library usernames, card numbers, or passwords. It does not sign in for you or check your account details. Leaving sign-in and submission to the websites is a deliberate choice to protect security and privacy.</p>
+      <p>A source page is read only when you open the extension on a supported book page. It does not read browsing history or inspect other websites. It has no analytics or remote AI service.</p>
+      <p>Your ZIP is used on this device to rank nearby supported libraries. It is not sent or saved. Local settings contain only your selected library IDs and preferred reading format.</p>
+      <p>Your selected catalogs receive the book title, author, and ISBN. Goodreads details require an independent match from a selected catalog or the Library of Congress. Verification can send the ISBN to lx2.loc.gov. These search requests omit cookies and the source-page URL. Book searches can reveal reading interests to those services.</p>
+      <p>Book details and search results use temporary browser-session storage. Results are reused for ten minutes. They can remain in session storage until replaced, refreshed, cleared after a complete purchase fill, or the browser session ends.</p>
+      <p>One prepared purchase book is kept at a time. It becomes invalid after one hour and is removed when next accessed. You can also use Forget book. An extension reload or browser restart clears session data.</p>
+      <p>The KCLS/SPL Fill details control runs only in the request tab opened for your prepared book. It fills book fields only. It does not fill login, contact, or payment fields, and it never submits the form. A complete fill clears the prepared book. An incomplete fill keeps it for retry.</p>
+      <p>Text on the clipboard or in a library form remains there independently of the extension.</p>
+    </section>
+    <section aria-labelledby="covers-heading"><h2 id="covers-heading">Book covers</h2><p>Cover images load from the source website's image provider without a referrer. The provider still receives the image request and your network address. Cover URLs from other source websites are discarded.</p></section>
+  </main></body></html>

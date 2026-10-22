@@ -1,0 +1,44 @@
+# Generated dependencies, builds and browser output
+/node_modules/
+/dist/
+/test-results/
+/playwright-report/
+/coverage/
+*.log
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+
+# Local project history and downloaded source archives
+/tasks/
+/design/
+/releases/
+/data/source/
+/.private/
+/private/
+*.local
+
+# Credentials, environment files and browser profiles
+.env
+.env.*
+!.env.example
+.npmrc
+.netrc
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*.json
+*service-account*.json
+auth.json
+Cookies
+Login Data
+Local State
+/profiles/
+/.chrome/
+
+# Editor and operating-system files
+.DS_Store
+._*
+.idea/
+.vscode/
