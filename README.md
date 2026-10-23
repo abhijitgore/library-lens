@@ -139,6 +139,11 @@ The browser security check tests literal-text handling, private-address cover re
 
 Local notes, historical proposals, Chrome Web Store submission materials, downloaded datasets, release backups, generated packages, browser profiles, and screenshots are excluded from Git. CI runs the public-file check, dependency audit, tests, and package validation. It does not publish the extension.
 
+## Contributors
+
+- Abhijit Gore — project creator and maintainer.
+- OpenAI Codex — AI assistance with development and documentation.
+
 A project license has not been selected yet.
 
 Version 0.11.24 is a local trial. It is not a Chrome Web Store release.
