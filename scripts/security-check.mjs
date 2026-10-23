@@ -97,7 +97,14 @@ try {
   const hostileBook = (await page.evaluate(extractBookCandidates)).candidates[0];
   assert.equal(hostileBook.title, payload);
   assert.equal(await page.evaluate(() => Boolean(globalThis.payloadExecuted)), false);
-  await popup.evaluate(async book => { const { rememberBook } = await import('./lib/pending.js'); await rememberBook('spl', book); }, hostileBook);
+  // A prepared request does not bypass setup. Configure the synthetic user
+  // before testing hostile metadata in the prepared-request UI.
+  await popup.getByRole('heading', { name: 'Set up your libraries', exact: true }).waitFor();
+  await popup.evaluate(async book => {
+    await chrome.storage.local.set({ libraryPreferences: { selectedIds: ['spl'], preferredFormat: 'print' } });
+    const { rememberBook } = await import('./lib/pending.js');
+    await rememberBook('spl', book);
+  }, hostileBook);
   await popup.reload();
   await popup.getByRole('heading', { name: 'Prepared for SPL' }).waitFor();
   assert.equal(await popup.locator('#pending-request p').first().textContent(), payload);
