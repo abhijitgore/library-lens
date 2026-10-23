@@ -2,6 +2,12 @@
 
 Check a book at your libraries from its Amazon, Barnes & Noble, or Goodreads page. Open the library website to place a hold or request a purchase.
 
+![Library Lens on an Amazon book page, with numbered arrows showing the extension icon, library availability, and Place hold link.](assets/library-lens-demo.png)
+
+1. Open Library Lens on a book page.
+2. Check availability at your selected libraries.
+3. Select **Place hold** to continue on the library website.
+
 ## Support
 
 Library Lens supports selected libraries in the **Seattle area and San Francisco Bay Area**. It does not support libraries across the whole US.
