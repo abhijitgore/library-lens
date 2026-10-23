@@ -44,6 +44,7 @@ export const LIBRARIES = Object.freeze({
     id: 'uw', name: 'University of Washington Libraries', short: 'UW',
     origin: 'https://orbiscascade-washington.primo.exlibrisgroup.com',
     permission: 'https://orbiscascade-washington.primo.exlibrisgroup.com/*',
+    loginUrl: 'https://search.lib.uw.edu/account',
     requestUrl: 'https://washington.libwizard.com/f/uwlib-purchase',
     purchaseLinkOnly: true
   }),

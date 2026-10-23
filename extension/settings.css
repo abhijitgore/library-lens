@@ -2,3 +2,5 @@
 
 #preferred-format{display:block;width:100%;min-height:42px;margin-top:6px;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:inherit}#preferred-format-status{font-size:12px;min-height:1.4em}
 header img.brand-mark{display:block;width:40px;height:40px;flex:none;border-radius:10px;object-fit:cover}
+
+#library-login-links{display:grid;gap:8px}#library-login-links a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:9px;color:var(--ink);text-decoration:none;font-weight:600}#library-login-links a:hover{background:var(--soft);border-color:var(--accent)}#library-login-links a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}

@@ -113,6 +113,12 @@ try {
   assert.equal(await popup.getByRole('button', { name: 'Choose libraries', exact: true }).count(), 1);
   assert.equal(await popup.getByRole('button', { name: /Check libraries|Connect/ }).count(), 0);
   assert.equal((await worker.evaluate(() => testNetwork.calls)).length, 0);
+  assert.equal(await popup.locator('#refresh-button').isHidden(), true);
+  const setupOpened = context.waitForEvent('page');
+  await popup.getByRole('button', { name: 'Choose libraries', exact: true }).click();
+  const promptedSettings = await setupOpened;
+  await promptedSettings.waitForURL(`chrome-extension://${loaded.id}/settings.html`);
+  await promptedSettings.close();
   const setup = await context.newPage();
   await setup.goto(`chrome-extension://${loaded.id}/settings.html`);
   await setup.getByText('Find books across your libraries.', { exact: true }).waitFor();
@@ -138,11 +144,15 @@ try {
   ]);
   const choices = setup.locator('#library-list input[type=checkbox]');
   await choices.nth(0).check(); await choices.nth(1).check(); await choices.nth(2).check();
+  assert.deepEqual(await setup.locator('#library-login-links a').evaluateAll(links => links.map(a => ({ href: a.href, target: a.target, rel: a.rel }))), ['sfpl', 'marinet', 'smcl'].map(host => ({ href: `https://${host}.bibliocommons.com/user/login`, target: '_blank', rel: 'noopener noreferrer' })));
   await choices.nth(3).click();
   assert.equal(await setup.locator('#library-list input:checked').count(), 3);
   await setup.getByRole('button', { name: 'Save selection', exact: true }).click();
   await setup.getByText('Saved. Library Lens will search these libraries.', { exact: true }).waitFor();
   assert.deepEqual(await worker.evaluate(async () => (await chrome.storage.local.get('libraryPreferences')).libraryPreferences), { selectedIds: ['sfpl', 'marin', 'smcl'], preferredFormat: 'print' });
+  await setup.reload();
+  await setup.locator('#library-login-links a').nth(2).waitFor();
+  assert.equal(await setup.locator('#library-login-links a').count(), 3);
   await setup.close();
   await popup.reload();
   await popup.getByText('Enter a title or ISBN.', { exact: true }).waitFor();

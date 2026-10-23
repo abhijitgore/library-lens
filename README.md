@@ -25,7 +25,7 @@ Library Lens does not collect or store library usernames, card numbers, or passw
 2. Turn on **Developer mode**.
 3. Select **Load unpacked**. Choose this project's `extension` folder.
 4. To update an existing installation, select **Reload** on its extension card.
-5. Confirm version **0.11.23**. Pin Library Lens from Chrome's Extensions menu.
+5. Confirm version **0.11.24**. Pin Library Lens from Chrome's Extensions menu.
 
 An extension reload clears its temporary book data. Prepare a purchase request again after an update. To remove the extension, use Chrome's extension manager.
 
@@ -71,6 +71,8 @@ The KCLS/SPL helper fills book fields only. It leaves account, contact, pickup, 
 The extension remembers one prepared book. Preparing another book replaces it. A complete fill clears the prepared book and search cache. An incomplete fill keeps the book for retry. Use **Copy book details** or **Forget book** in the popup when needed.
 
 The prepared book becomes invalid after one hour and is removed when next accessed. An extension reload or browser restart also clears session data. Text already copied or filled into a library form remains there independently.
+
+In Settings, select your libraries and use the sign-in links to open their official account pages. These links remain available when you return to Settings. Library sessions can expire; Library Lens does not check login status.
 
 ## Privacy
 
@@ -133,4 +135,4 @@ Local notes, historical proposals, Chrome Web Store submission materials, downlo
 
 A project license has not been selected yet.
 
-Version 0.11.23 is a local trial. It is not a Chrome Web Store release.
+Version 0.11.24 is a local trial. It is not a Chrome Web Store release.

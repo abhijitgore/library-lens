@@ -429,6 +429,8 @@ async function init() {
     $('page-status').hidden = true;
     $('book-form').hidden = true;
     $('libraries').hidden = true;
+    $('refresh-button').hidden = true;
+    return;
   }
   for (const library of libraries) makeLibrary(library);
   $('book-form').addEventListener('submit', event => { event.preventDefault(); searchLibraries(); });

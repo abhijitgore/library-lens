@@ -26,9 +26,29 @@ function selectedIds() {
   return [...libraryList.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value);
 }
 
+// Fixed catalog configuration only. No credentials or login-state checks.
+function renderSignIns(ids) {
+  const list = $('library-login-links');
+  list.replaceChildren();
+  for (const id of ids) {
+    const library = LIBRARIES[id];
+    if (!library) continue;
+    const link = document.createElement('a');
+    link.href = library.loginUrl || new URL('/user/login', library.origin).href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.referrerPolicy = 'no-referrer';
+    link.textContent = `Sign in · ${library.name} ↗`;
+    link.title = `Open ${library.name} in a new tab`;
+    list.append(link);
+  }
+  $('library-signins').hidden = !list.childElementCount;
+}
+
 function updateSaveButton() {
   const selected = selectedIds();
   saveButton.disabled = selected.length < 1 || selected.length > 3 || !$('zip-code').validity.valid || lastSearchedZip !== $('zip-code').value.trim();
+  renderSignIns(libraryList.hidden ? savedIds : selected);
   status(selected.length > 3 ? 'Choose no more than three.' : `${selected.length} of 3 selected.`);
 }
 
@@ -101,6 +121,7 @@ saveButton.addEventListener('click', async () => {
   const current = (await chrome.storage.local.get('libraryPreferences')).libraryPreferences || {};
   await chrome.storage.local.set({ libraryPreferences: sanitizeLibraryPreferences({ ...current, selectedIds: ids, preferredFormat: normalizePreferredFormat($('preferred-format').value) }) });
   savedIds = ids;
+  renderSignIns(savedIds);
   status('Saved. Library Lens will search these libraries.');
 });
 
@@ -123,6 +144,7 @@ async function init() {
     $('preferred-format-status').textContent = 'Default: Print';
   }
   savedIds = libraryPreferences.selectedIds.filter(id => Object.hasOwn(LIBRARIES, id));
+  renderSignIns(savedIds);
   status(savedIds.length ? 'Enter ZIP to review nearby libraries. Your saved choices remain active.' : 'Enter a ZIP code to choose libraries.');
 }
 
