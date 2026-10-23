@@ -470,10 +470,21 @@ try {
     }
   });
   await requestTab.addStyleTag({ content: 'body{font:15px system-ui;padding:30px;background:#fafafa}mat-form-field{display:block;margin:15px 0;max-width:620px}mat-label{display:block;font-size:12px;color:#555}input,textarea{padding:10px;width:560px;border:1px solid #ccc;border-radius:5px}mat-select{padding:10px;border:1px solid #ccc;border-radius:5px}' });
+  // Restoring the form can preserve scroll anchoring from the temporary login
+  // layout. Put the tested field in view before requiring its right-side helper.
+  await requestTab.locator('app-patron-request-create mat-form-field').first().scrollIntoViewIfNeeded();
   await requestTab.waitForFunction(() => {
     const helper = document.getElementById('library-lens-request-helper');
     const first = document.querySelector('app-patron-request-create mat-form-field');
     return helper?.dataset.anchor === 'field-right' && helper.getBoundingClientRect().left >= first.getBoundingClientRect().right;
+  }).catch(async error => {
+    const placement = await requestTab.evaluate(() => ({
+      viewport: [innerWidth, innerHeight], scroll: [scrollX, scrollY],
+      anchor: document.getElementById('library-lens-request-helper')?.dataset.anchor,
+      field: document.querySelector('app-patron-request-create mat-form-field')?.getBoundingClientRect().toJSON(),
+      helper: document.getElementById('library-lens-request-helper')?.getBoundingClientRect().toJSON()
+    }));
+    throw new Error(`Helper placement failed: ${JSON.stringify(placement)}`, { cause: error });
   });
   const helperView = await withHelper(requestTab, helper => ({ text: helper.text, images: helper.img ? 1 : 0 }));
   assert.ok(helperView.text.includes('Library Lens') && helperView.text.includes('Extension'));
