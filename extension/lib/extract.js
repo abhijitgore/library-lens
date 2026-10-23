@@ -33,9 +33,11 @@ export function extractBookCandidates() {
       // Block literal IPs and local hosts even if this helper is called outside
       // the popup's supported-source gate. URL normalizes alternate IP forms.
       if (/^(?:\d{1,3}\.){3}\d{1,3}$/.test(url.hostname) || url.hostname.startsWith('[') || /(?:^|\.)(?:localhost|local|internal)$/.test(url.hostname)) return '';
-      const cdns = ['m.media-amazon.com', 'images-na.ssl-images-amazon.com', 'images-eu.ssl-images-amazon.com', 'images.gr-assets.com', 'i.gr-assets.com'];
+      const cdns = ['m.media-amazon.com', 'images-na.ssl-images-amazon.com', 'images-eu.ssl-images-amazon.com'];
       const bnImage = location.hostname.replace(/^www\./, '') === 'barnesandnoble.com' && url.hostname === 'cdn.shopify.com' && url.pathname.startsWith('/s/files/1/0674/5433/7265/files/');
-      return url.protocol === 'https:' && !url.username && !url.password && (url.origin === location.origin || cdns.includes(url.hostname) || bnImage) && url.href.length < 2000 ? url.href : '';
+      // Fixed retailer image CDNs only (no retailer-origin images): the popup
+      // loads covers with crossorigin="anonymous", so no retailer cookies ride along.
+      return url.protocol === 'https:' && !url.username && !url.password && (cdns.includes(url.hostname) || bnImage) && url.href.length < 2000 ? url.href : '';
     } catch { return ''; }
   };
   const add = (book, source) => {

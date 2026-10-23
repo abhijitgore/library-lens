@@ -19,6 +19,50 @@ const context = await chromium.launchPersistentContext(profile, {
 });
 const errors = [];
 context.on('page', page => page.on('pageerror', error => errors.push({ url: page.url(), message: error.message })));
+// The request helper lives in a closed shadow root, which page scripts and
+// Playwright locators cannot reach. Read and drive it through CDP instead.
+async function withHelper(page, action) {
+  const cdp = await context.newCDPSession(page);
+  try {
+    const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+    const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#library-lens-request-helper' });
+    if (!nodeId) return action(null);
+    const { node } = await cdp.send('DOM.describeNode', { nodeId, depth: -1, pierce: true });
+    const shadow = node.shadowRoots?.[0];
+    if (!shadow) return action(null);
+    const nodes = [];
+    (function walk(n) { nodes.push(n); for (const child of n.children || []) walk(child); })(shadow);
+    const attr = (n, name) => { const index = (n.attributes || []).indexOf(name); return index >= 0 ? n.attributes[index + 1] : null; };
+    const helper = {
+      mode: shadow.shadowRootType,
+      text: nodes.filter(n => n.nodeType === 3).map(n => n.nodeValue).join(' ').replace(/\s+/g, ' ').trim(),
+      button: label => nodes.find(n => n.nodeName === 'BUTTON' && attr(n, 'aria-label') === label),
+      img: nodes.find(n => n.nodeName === 'IMG'),
+      status: nodes.find(n => attr(n, 'role') === 'status'),
+      async evaluate(n, functionDeclaration) {
+        const { object } = await cdp.send('DOM.resolveNode', { backendNodeId: n.backendNodeId });
+        const { result } = await cdp.send('Runtime.callFunctionOn', { objectId: object.objectId, functionDeclaration, returnByValue: true });
+        return result.value;
+      },
+      async click(n) {
+        // A real pointer click, so the helper's isTrusted check passes.
+        const { model } = await cdp.send('DOM.getBoxModel', { backendNodeId: n.backendNodeId });
+        const [x1, y1, , , x2, y2] = model.content;
+        await page.mouse.click((x1 + x2) / 2, (y1 + y2) / 2);
+      }
+    };
+    return await action(helper);
+  } finally { await cdp.detach().catch(() => {}); }
+}
+async function waitForHelper(page, predicate, timeout = 10000) {
+  const deadline = Date.now() + timeout;
+  for (;;) {
+    const value = await withHelper(page, helper => helper ? predicate(helper) : false);
+    if (value) return value;
+    if (Date.now() > deadline) throw new Error('Request helper condition not met in time');
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+}
 try {
   await context.route(/^https?:\/\//, route => route.abort());
   const manager = await context.newPage();
@@ -229,8 +273,9 @@ try {
   assert.equal(await popup.getByRole('combobox').count(), 0);
   assert.equal(await popup.getByRole('button', { name: /Copy details|Open form|Check libraries/ }).count(), 0);
   assert.ok(await popup.getByRole('button', { name: 'Request purchase', exact: true }).first().evaluate(el => el.getBoundingClientRect().width) < 160);
-  await context.route('https://book-fixture.example/cover.svg', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="84" height="124"><rect width="84" height="124" fill="#b6ca89"/><path d="M0 96 84 20v25L0 121Z" fill="#253f32"/><text x="8" y="20" font-family="sans-serif" font-size="9" font-weight="bold">PROJECT</text><text x="8" y="32" font-family="sans-serif" font-size="9" font-weight="bold">HAIL MARY</text></svg>' }));
-  await popup.evaluate(async () => { const {renderCover} = await import('./lib/cover.js'); renderCover('https://book-fixture.example/cover.svg'); });
+  // Covers load crossorigin="anonymous" from an allowlisted CDN host, so the fixture answers with CORS headers.
+  await context.route('https://m.media-amazon.com/images/I/fixture-cover.svg', route => route.fulfill({ contentType: 'image/svg+xml', headers: { 'access-control-allow-origin': '*' }, body: '<svg xmlns="http://www.w3.org/2000/svg" width="84" height="124"><rect width="84" height="124" fill="#b6ca89"/><path d="M0 96 84 20v25L0 121Z" fill="#253f32"/><text x="8" y="20" font-family="sans-serif" font-size="9" font-weight="bold">PROJECT</text><text x="8" y="32" font-family="sans-serif" font-size="9" font-weight="bold">HAIL MARY</text></svg>' }));
+  await popup.evaluate(async () => { const {renderCover} = await import('./lib/cover.js'); renderCover('https://m.media-amazon.com/images/I/fixture-cover.svg'); });
   await popup.locator('#book-cover').waitFor({state:'visible'});
   await popup.locator('body').screenshot({ path: resolve(results, 'popup-missing-light.png') });
   await popup.emulateMedia({ colorScheme: 'dark' });
@@ -387,15 +432,19 @@ try {
   // Browser-initiated chrome.tabs.create navigation bypasses Playwright routing.
   // Revisit the observed official URL through Playwright to install the fixture.
   await requestTab.goto('https://evgcatalog.kcls.org/patron-ui/en/requests/create');
-  await requestTab.getByRole('button', { name: 'Fill book details', exact: true }).waitFor();
+  await waitForHelper(requestTab, helper => helper.mode === 'closed' && Boolean(helper.button('Fill book details')));
   assert.equal(await unrelated.locator('#library-lens-request-helper').count(), 0);
   await popup.close();
-  await requestTab.getByRole('button', { name: 'Fill book details', exact: true }).evaluate(el => el.click());
+  // Page scripts cannot reach the button (closed root) and a synthetic click on the host does nothing.
+  assert.equal(await requestTab.evaluate(() => document.getElementById('library-lens-request-helper').shadowRoot), null);
+  await requestTab.evaluate(() => document.getElementById('library-lens-request-helper').dispatchEvent(new MouseEvent('click', { bubbles: true })));
   assert.equal(await requestTab.locator('#field-0').inputValue(), '');
+  // The helper icon is inlined; nothing in the package is web-accessible.
+  assert.equal(await requestTab.evaluate(url => fetch(url).then(response => response.ok, () => false), `chrome-extension://${loaded.id}/icons/book-48.png`), false);
   // Simulate the not-yet-ready/login screen. Failure must retain the prepared book.
   await requestTab.locator('app-patron-request-create').evaluate(el => { window.savedMarkup = [...el.children].filter(child => child.id !== 'library-lens-request-helper').map(child => child.outerHTML).join(''); el.innerHTML = 'Sign in'; });
-  await requestTab.getByRole('button', { name: 'Fill book details', exact: true }).click();
-  await requestTab.getByText(/Sign in and choose/).waitFor();
+  await withHelper(requestTab, helper => helper.click(helper.button('Fill book details')));
+  await waitForHelper(requestTab, helper => /Sign in and choose/.test(helper.text));
   await requestTab.waitForFunction(() => document.getElementById('library-lens-request-helper')?.dataset.anchor === 'waiting');
   const waiting = await requestTab.locator('#library-lens-request-helper').boundingBox();
   assert.ok(waiting.x < 20 && waiting.y > 350 && waiting.y < 650 && waiting.width <= 110);
@@ -416,9 +465,9 @@ try {
     const first = document.querySelector('app-patron-request-create mat-form-field');
     return helper?.dataset.anchor === 'field-right' && helper.getBoundingClientRect().left >= first.getBoundingClientRect().right;
   });
-  assert.equal(await requestTab.locator('#library-lens-request-helper').getByText('Library Lens', { exact: true }).count(), 1);
-  assert.equal(await requestTab.locator('#library-lens-request-helper').getByText('Extension', { exact: true }).count(), 1);
-  assert.equal(await requestTab.locator('#library-lens-request-helper').locator('img').count(), 1);
+  const helperView = await withHelper(requestTab, helper => ({ text: helper.text, images: helper.img ? 1 : 0 }));
+  assert.ok(helperView.text.includes('Library Lens') && helperView.text.includes('Extension'));
+  assert.equal(helperView.images, 1);
   const placement = await requestTab.evaluate(() => {
     const helper = document.getElementById('library-lens-request-helper').getBoundingClientRect();
     const field = document.querySelector('app-patron-request-create mat-form-field').getBoundingClientRect();
@@ -444,16 +493,16 @@ try {
       });
     }
   });
-  await requestTab.locator('#library-lens-request-helper').evaluate(el => { el.shadowRoot.querySelector('[role="status"]').textContent = ''; });
-  await requestTab.waitForFunction(() => document.querySelector('#library-lens-request-helper')?.shadowRoot?.querySelector('.icon img')?.naturalWidth === 48);
-  assert.equal(await requestTab.locator('#library-lens-request-helper').evaluate(el => el.shadowRoot.querySelector('.icon img').currentSrc.endsWith('/icons/book-48.png')), true);
+  await withHelper(requestTab, helper => helper.evaluate(helper.status, 'function () { this.textContent = ""; }'));
+  const inlineIcon = 'function () { return this.naturalWidth === 48 && this.currentSrc.startsWith("data:image/png;base64,"); }';
+  await waitForHelper(requestTab, helper => helper.evaluate(helper.img, inlineIcon));
   await requestTab.screenshot({ path: resolve(results, 'kcls-floating-helper.png'), fullPage: true });
   await requestTab.locator('#library-lens-request-helper').screenshot({ path: resolve(results, 'helper-light.png') });
   await requestTab.emulateMedia({ colorScheme: 'dark' });
-  assert.equal(await requestTab.locator('#library-lens-request-helper').evaluate(el => el.shadowRoot.querySelector('.icon img').currentSrc.endsWith('/icons/book-48.png')), true);
+  assert.equal(await withHelper(requestTab, helper => helper.evaluate(helper.img, inlineIcon)), true);
   await requestTab.locator('#library-lens-request-helper').screenshot({ path: resolve(results, 'helper-dark.png') });
   await requestTab.emulateMedia({ colorScheme: 'light' });
-  await requestTab.getByRole('button', { name: 'Fill book details', exact: true }).click();
+  await withHelper(requestTab, helper => helper.click(helper.button('Fill book details')));
   await requestTab.locator('#library-lens-request-helper').waitFor({ state: 'hidden' });
   assert.equal(await requestTab.locator('#field-0').inputValue(), 'Project Hail Mary');
   assert.equal(await requestTab.locator('#field-3').inputValue(), '2021');
@@ -489,7 +538,7 @@ try {
   for (let i = errors.length - 1; i >= beforeLiveSpl; i--) {
     if (errors[i].url === splTab.url() && /^(jQuery|\$) is not defined$/.test(errors[i].message)) errors.splice(i, 1);
   }
-  await splTab.getByRole('button', { name: 'Fill book details', exact: true }).waitFor();
+  await waitForHelper(splTab, helper => Boolean(helper.button('Fill book details')));
   await popup.close();
   await splTab.waitForFunction(() => document.getElementById('library-lens-request-helper')?.dataset.anchor === 'waiting');
   await splTab.evaluate(markup => {
@@ -499,7 +548,7 @@ try {
     document.querySelector('form').addEventListener('submit', e => { e.preventDefault(); window.submissions++; });
   }, splForm);
   await splTab.waitForFunction(() => document.getElementById('library-lens-request-helper')?.dataset.anchor === 'field-right');
-  await splTab.getByRole('button', { name: 'Fill book details', exact: true }).click();
+  await withHelper(splTab, helper => helper.click(helper.button('Fill book details')));
   await splTab.locator('#library-lens-request-helper').waitFor({ state: 'hidden' });
   assert.equal(await splTab.locator('#pquestion_17516').inputValue(), book.title);
   assert.equal(await splTab.locator('#custom7_17516').inputValue(), book.author);

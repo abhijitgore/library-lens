@@ -6,6 +6,8 @@ Check a book at your libraries from its Amazon, Barnes & Noble, or Goodreads pag
 
 Library Lens supports selected libraries in the **Seattle area and San Francisco Bay Area**. It does not support libraries across the whole US.
 
+Library Lens is an independent project. It is not affiliated with, endorsed by, or sponsored by any library, Amazon, Barnes & Noble, or Goodreads.
+
 | Area | Supported library catalogs |
 | --- | --- |
 | Seattle area | King County Library System (KCLS), The Seattle Public Library (SPL), University of Washington Libraries (UW) |
@@ -23,7 +25,7 @@ Library Lens does not collect or store library usernames, card numbers, or passw
 2. Turn on **Developer mode**.
 3. Select **Load unpacked**. Choose this project's `extension` folder.
 4. To update an existing installation, select **Reload** on its extension card.
-5. Confirm version **0.11.22**. Pin Library Lens from Chrome's Extensions menu.
+5. Confirm version **0.11.23**. Pin Library Lens from Chrome's Extensions menu.
 
 An extension reload clears its temporary book data. Prepare a purchase request again after an update. To remove the extension, use Chrome's extension manager.
 
@@ -72,14 +74,16 @@ The prepared book becomes invalid after one hour and is removed when next access
 
 ## Privacy
 
+The full privacy policy is in [PRIVACY.md](PRIVACY.md). In short:
+
 - A source page is read only when you open Library Lens on a supported book page. It does not read your browsing history or inspect other websites.
 - Only your selected library IDs and preferred format are saved in local settings. Your ZIP is used for local ranking and is not saved or sent.
 - Book details, catalog results, and one prepared purchase request use temporary browser-session storage. They are not written to persistent extension storage.
 - Your selected catalogs receive the book title, author, and ISBN. Goodreads verification can also send the ISBN to `lx2.loc.gov`. These search requests omit cookies and the source-page URL. Book searches can reveal reading interests to these services.
-- Cover images load from the source website's image provider without a referrer. That provider still receives the image request and your network address.
+- Cover images load only from the Amazon and Barnes & Noble image servers, without a referrer and without cookies. That image server still receives the request and your network address.
 - Library Lens does not collect names, contact details, library credentials, or passwords. It has no analytics or remote AI service. It does not submit holds or purchase requests.
 
-The extension uses `activeTab`, `scripting`, and `storage` permissions. Network access is limited to the supported catalog, verification, and request hosts. The KCLS/SPL helper runs only in the request tab opened for the prepared book. It does not read or fill login fields.
+The extension uses `activeTab`, `scripting`, and `storage` permissions. Network access is limited to the supported catalog, verification, and request hosts. The KCLS/SPL helper appears only in the request tab opened for the prepared book. It and the popup's Paste action write only to the official KCLS or SPL request form, and only when you choose them. Neither reads or fills login fields.
 
 Ten minutes is the cache's reuse limit, not a deletion deadline. Cached data can remain in session storage until replaced, refreshed, cleared after a complete fill, or the browser session ends.
 
@@ -125,8 +129,8 @@ If Gitleaks is installed, run `gitleaks git --redact` before a push. Review perm
 
 The browser security check tests literal-text handling, private-address cover rejection, response-size limits, and form boundaries. It also records the documented cover-image requests and session-data retention. It is not a full penetration test.
 
-Local notes, historical proposals, downloaded datasets, release backups, generated packages, browser profiles, and screenshots are excluded from Git. CI runs the public-file check, dependency audit, tests, and package validation. It does not publish the extension.
+Local notes, historical proposals, Chrome Web Store submission materials, downloaded datasets, release backups, generated packages, browser profiles, and screenshots are excluded from Git. CI runs the public-file check, dependency audit, tests, and package validation. It does not publish the extension.
 
 A project license has not been selected yet.
 
-Version 0.11.22 is a local trial. It is not a Chrome Web Store release.
+Version 0.11.23 is a local trial. It is not a Chrome Web Store release.

@@ -49,13 +49,19 @@ try {
   const requests = [];
   await context.route(/^https?:\/\//, async route => {
     const request = route.request();
-    requests.push({ url: request.url(), type: request.resourceType(), referrer: request.headers().referer || '' });
+    const headers = await request.allHeaders();
+    requests.push({ url: request.url(), type: request.resourceType(), referrer: headers.referer || '', cookie: headers.cookie || '' });
     if (request.url() === 'https://source.example/book') {
       return route.fulfill({ contentType: 'text/html', body: '<script type="application/ld+json">{"@type":"Book","name":"Synthetic","image":"https://source.example/cover?token=synthetic"}</script>' });
     }
     if (request.url() === 'https://172.16.0.1/book') return route.fulfill({ contentType: 'text/html', body: '<main>Synthetic private page</main>' });
-    return route.fulfill({ contentType: 'image/png', body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l1sAAAAASUVORK5CYII=', 'base64') });
+    return route.fulfill({ contentType: 'image/png', headers: { 'access-control-allow-origin': '*' }, body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l1sAAAAASUVORK5CYII=', 'base64') });
   });
+  // A signed-in retailer session (SameSite=None cookies on the image host) must not ride along with cover requests.
+  await context.addCookies([
+    { name: 'session-id', value: 'synthetic-session', domain: 'm.media-amazon.com', path: '/', secure: true, sameSite: 'None' },
+    { name: 'source-session', value: 'synthetic-source', domain: 'source.example', path: '/', secure: true, sameSite: 'None' }
+  ]);
   const manager = await context.newPage();
   await manager.goto('chrome://extensions/');
   const extensions = await manager.evaluate(() => new Promise(resolve => chrome.developerPrivate.getExtensionsInfo({ includeDisabled: true }, resolve)));
@@ -64,14 +70,25 @@ try {
   const page = await context.newPage();
   await page.goto('https://source.example/book');
   const extracted = await page.evaluate(extractBookCandidates);
-  const url = extracted.candidates[0].coverUrl;
-  assert.equal(url, 'https://source.example/cover?token=synthetic');
+  // A cover on the source page's own origin is discarded; only the fixed retailer CDNs are accepted.
+  assert.equal(extracted.candidates[0].coverUrl || '', '');
+  findings.sameOriginCoverRejected = true;
   const popup = await context.newPage();
   await popup.goto(`chrome-extension://${loaded.id}/popup.html`);
-  await popup.evaluate(async url => { const { renderCover } = await import('./lib/cover.js'); renderCover(url); }, url);
-  await popup.waitForFunction(() => { const image = document.getElementById('book-cover'); return image.src.includes('source.example') && image.complete; });
-  assert.ok(requests.some(request => request.url === url && request.type === 'image'));
-  findings.sourceControlledCoverRequestFromPopup = true;
+  const cdnCover = 'https://m.media-amazon.com/images/I/synthetic-cover.jpg';
+  await popup.evaluate(async url => { const { renderCover } = await import('./lib/cover.js'); renderCover(url); }, cdnCover);
+  await popup.waitForFunction(url => { const image = document.getElementById('book-cover'); return image.src === url && image.complete && !image.hidden; }, cdnCover);
+  const coverRequest = requests.find(request => request.url === cdnCover && request.type === 'image');
+  assert.ok(coverRequest);
+  assert.equal(coverRequest.cookie, '');
+  assert.equal(coverRequest.referrer, '');
+  findings.coverRequestOmitsCookiesAndReferrer = true;
+  // The popup CSP img-src stops hosts outside the allowlist before any request leaves the browser.
+  await popup.evaluate(async url => { const { renderCover } = await import('./lib/cover.js'); renderCover(url); }, 'https://source.example/cover?token=synthetic');
+  await popup.waitForTimeout(500);
+  assert.equal(requests.some(request => request.url.startsWith('https://source.example/cover')), false);
+  assert.equal(await popup.locator('#book-cover').isHidden(), true);
+  findings.nonAllowlistedCoverBlockedByCsp = true;
   findings.coverRequests = requests.filter(request => request.type === 'image');
   // Hostile metadata stays literal through extraction, display, copy and form fill.
   const payload = '<img src=x onerror="globalThis.payloadExecuted=true">';

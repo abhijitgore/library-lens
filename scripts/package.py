@@ -10,8 +10,8 @@ assert manifest['manifest_version'] == 3
 assert set(manifest['permissions']) == {'activeTab', 'scripting', 'storage'}
 assert set(manifest['host_permissions']) == {'https://kcls.bibliocommons.com/*', 'https://seattle.bibliocommons.com/*', 'https://sfpl.bibliocommons.com/*', 'https://oaklandlibrary.bibliocommons.com/*', 'https://marinet.bibliocommons.com/*', 'https://smcl.bibliocommons.com/*', 'https://sjpl.bibliocommons.com/*', 'https://orbiscascade-washington.primo.exlibrisgroup.com/*', 'https://www.spl.org/*', 'https://lx2.loc.gov/*', 'https://evgcatalog.kcls.org/*'}
 assert manifest['background'] == {'service_worker': 'background.js', 'type': 'module'}
-assert manifest['web_accessible_resources'] == [{'resources': ['icons/book-48.png'], 'matches': ['https://evgcatalog.kcls.org/*', 'https://www.spl.org/*']}]
-for key in ['content_scripts', 'optional_host_permissions', 'externally_connectable']:
+assert "img-src 'self' " in manifest['content_security_policy']['extension_pages'] and "connect-src 'self' " in manifest['content_security_policy']['extension_pages']
+for key in ['content_scripts', 'optional_host_permissions', 'externally_connectable', 'web_accessible_resources']:
     assert key not in manifest, f'Unexpected permission/surface: {key}'
 for path in [manifest['action']['default_popup'], manifest['background']['service_worker'], 'settings.html', *manifest['icons'].values()]:
     assert (extension / path).is_file(), f'Missing runtime file: {path}'

@@ -5,9 +5,11 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_FILES = {'.gitignore', '.gitattributes', '.env.example', 'README.md', 'package.json', 'package-lock.json', 'LICENSE', 'LICENSE.md'}
+PUBLIC_FILES = {'.gitignore', '.gitattributes', '.env.example', 'README.md', 'PRIVACY.md', 'package.json', 'package-lock.json', 'LICENSE', 'LICENSE.md'}
+# The public privacy policy is a copy of the private master; a public commit must not let them drift.
+PRIVACY_MASTER = ROOT / 'ChromeExtensionStore' / 'privacy-policy.md'
 PUBLIC_DIRS = {'extension': {'.json', '.html', '.css', '.js', '.png', '.svg'}, 'tests': {'.js', '.json', '.html', '.xml'}, 'scripts': {'.mjs', '.py'}, 'assets': {'.png', '.svg'}, '.github': {'.yml', '.yaml'}}
-PRIVATE_DIRS = {'tasks', 'design', 'releases', 'dist', 'node_modules', 'test-results', 'playwright-report', 'coverage', '.private', 'private', 'profiles'}
+PRIVATE_DIRS = {'tasks', 'design', 'ChromeExtensionStore', 'releases', 'dist', 'node_modules', 'test-results', 'playwright-report', 'coverage', '.private', 'private', 'profiles'}
 SECRET_NAMES = {'auth.json', '.npmrc', '.netrc', 'Cookies', 'Login Data', 'Local State', '.DS_Store'}
 PATTERNS = {
     'private absolute path': re.compile(r'/(?:Users|home)/[^/\s]+/'),
@@ -49,6 +51,10 @@ def check_index():
             if not (domain in {'example.com', 'example.org', 'example.net'} or domain.endswith(('.test', '.example', '.invalid'))):
                 failures.append((name, 'non-example email address; review before publication'))
                 break
+    if PRIVACY_MASTER.is_file():
+        staged = subprocess.run(['git', 'show', ':PRIVACY.md'], cwd=ROOT, capture_output=True)
+        if staged.returncode != 0 or staged.stdout != PRIVACY_MASTER.read_bytes():
+            failures.append(('PRIVACY.md', 'differs from ChromeExtensionStore/privacy-policy.md; copy the master before committing'))
     if not count:
         failures.append(('<index>', 'no staged or tracked public files to check'))
     if failures:

@@ -22,6 +22,7 @@
     <section aria-labelledby="privacy-heading">
       <h2 id="privacy-heading">Privacy</h2>
       <p>Library Lens supports selected Seattle-area and Bay Area libraries. Use a single book page on amazon.com, bn.com (Barnes &amp; Noble), or goodreads.com.</p>
+      <p>Library Lens is an independent project. It is not affiliated with, endorsed by, or sponsored by any library, Amazon, Barnes &amp; Noble, or Goodreads.</p>
       <p>Sign in to the source website and your selected library websites before use. Keep those sessions active. You complete holds and purchase requests on the official library website. It can ask you to sign in again.</p>
       <p>The extension does not collect or store library usernames, card numbers, or passwords. It does not sign in for you or check your account details. Leaving sign-in and submission to the websites is a deliberate choice to protect security and privacy.</p>
       <p>A source page is read only when you open the extension on a supported book page. It does not read browsing history or inspect other websites. It has no analytics or remote AI service.</p>
@@ -29,8 +30,8 @@
       <p>Your selected catalogs receive the book title, author, and ISBN. Goodreads details require an independent match from a selected catalog or the Library of Congress. Verification can send the ISBN to lx2.loc.gov. These search requests omit cookies and the source-page URL. Book searches can reveal reading interests to those services.</p>
       <p>Book details and search results use temporary browser-session storage. Results are reused for ten minutes. They can remain in session storage until replaced, refreshed, cleared after a complete purchase fill, or the browser session ends.</p>
       <p>One prepared purchase book is kept at a time. It becomes invalid after one hour and is removed when next accessed. You can also use Forget book. An extension reload or browser restart clears session data.</p>
-      <p>The KCLS/SPL Fill details control runs only in the request tab opened for your prepared book. It fills book fields only. It does not fill login, contact, or payment fields, and it never submits the form. A complete fill clears the prepared book. An incomplete fill keeps it for retry.</p>
+      <p>The KCLS/SPL Fill details control appears only in the request tab that Library Lens opened for your prepared book. It and the popup's Paste book details write only to the official KCLS or SPL request form, and only when you choose them. They fill book fields only. They do not fill login, contact, or payment fields, and they never submit the form. A complete fill clears the prepared book. An incomplete fill keeps it for retry.</p>
       <p>Text on the clipboard or in a library form remains there independently of the extension.</p>
     </section>
-    <section aria-labelledby="covers-heading"><h2 id="covers-heading">Book covers</h2><p>Cover images load from the source website's image provider without a referrer. The provider still receives the image request and your network address. Cover URLs from other source websites are discarded.</p></section>
+    <section aria-labelledby="covers-heading"><h2 id="covers-heading">Book covers</h2><p>Cover images load only from the Amazon and Barnes &amp; Noble image servers, without a referrer and without cookies. The image server still receives the request and your network address. Cover URLs from any other host are discarded.</p></section>
   </main></body></html>
