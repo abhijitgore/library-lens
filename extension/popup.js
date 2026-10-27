@@ -151,7 +151,13 @@ function makeLibrary(library) {
   elapsed.setAttribute('aria-label', 'Query elapsed time');
   const libraryIcon = node('span', '', 'library-icon');
   libraryIcon.setAttribute('aria-hidden', 'true');
-  libraryIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 9-5 9 5H3Zm2 3v7m5-7v7m4-7v7m5-7v7M3 21h18"/></svg>';
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const icon = document.createElementNS(svgNS, 'svg');
+  for (const [name, value] of [['viewBox', '0 0 24 24'], ['fill', 'none'], ['stroke', 'currentColor'], ['stroke-width', '1.5'], ['stroke-linecap', 'round'], ['stroke-linejoin', 'round']]) icon.setAttribute(name, value);
+  const iconPath = document.createElementNS(svgNS, 'path');
+  iconPath.setAttribute('d', 'm3 8 9-5 9 5H3Zm2 3v7m5-7v7m4-7v7m5-7v7M3 21h18');
+  icon.append(iconPath);
+  libraryIcon.append(icon);
   const identity = node('div', '', 'library-identity'); identity.append(libraryIcon, title);
   header.append(identity, elapsed);
   section.append(header, content);

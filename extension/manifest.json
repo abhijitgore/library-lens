@@ -46,6 +46,6 @@
     "128": "icons/book-128.png"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; img-src 'self' https://m.media-amazon.com https://images-na.ssl-images-amazon.com https://images-eu.ssl-images-amazon.com https://cdn.shopify.com; connect-src 'self' https://kcls.bibliocommons.com https://seattle.bibliocommons.com https://sfpl.bibliocommons.com https://oaklandlibrary.bibliocommons.com https://marinet.bibliocommons.com https://smcl.bibliocommons.com https://sjpl.bibliocommons.com https://orbiscascade-washington.primo.exlibrisgroup.com https://lx2.loc.gov"
+    "extension_pages": "default-src 'none'; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; img-src 'self' https://m.media-amazon.com https://images-na.ssl-images-amazon.com https://images-eu.ssl-images-amazon.com https://cdn.shopify.com; connect-src 'self' https://kcls.bibliocommons.com https://seattle.bibliocommons.com https://sfpl.bibliocommons.com https://oaklandlibrary.bibliocommons.com https://marinet.bibliocommons.com https://smcl.bibliocommons.com https://sjpl.bibliocommons.com https://orbiscascade-washington.primo.exlibrisgroup.com https://lx2.loc.gov"
   }
 }

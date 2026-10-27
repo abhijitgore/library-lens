@@ -141,6 +141,22 @@ The browser security check tests literal-text handling, private-address cover re
 
 Local notes, historical proposals, Chrome Web Store submission materials, downloaded datasets, release backups, generated packages, browser profiles, and screenshots are excluded from Git. CI runs the public-file check, dependency audit, tests, and package validation. It does not publish the extension.
 
+## Security review
+
+A read-only security review of the tracked source was completed on 26 October 2026, before the repository was made public. It covered the manifest permissions and content security policy, every network request path, popup-to-background messaging, DOM output, the request-form filler, session storage, the CI workflow, dependencies, and a secret and personal-data scan of the full Git history.
+
+Result: no critical, high, or medium findings. Two low findings were fixed in the same release:
+
+- The extension-page content security policy now starts with `default-src 'none'; style-src 'self'`, so style, font, frame, and media sources are closed by default.
+- The one `innerHTML` call in the popup was replaced with `createElementNS`. The extension no longer uses `innerHTML` anywhere.
+
+Known, accepted items:
+
+- Host permissions for `www.spl.org` and `evgcatalog.kcls.org` are site-wide although the extension injects on two request pages only. Narrower patterns would break when those sites change routes.
+- Book data in `chrome.storage.session` expires lazily, on the next read or when the browser closes, rather than on a timer. It contains no account data.
+
+Checks that passed at review time: `npm test` (67 tests), `npm run test:browser`, `npm run test:security`, `npm run check:public`, `npm audit` (0 vulnerabilities), and `gitleaks git` over all commits. The review was a source audit, not a penetration test. Report a security concern through a GitHub issue; do not include exploit details in a public issue.
+
 ## Contributors
 
 - Abhijit Gore — project creator and maintainer.

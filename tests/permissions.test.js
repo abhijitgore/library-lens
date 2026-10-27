@@ -14,7 +14,7 @@ test('shipping manifest is click-only and permits only fixed supported library h
   assert.equal(manifest.web_accessible_resources, undefined);
   assert.equal(manifest.externally_connectable, undefined);
   const csp = manifest.content_security_policy.extension_pages;
-  assert.match(csp, /^script-src 'self'; object-src 'none'; base-uri 'none'; /);
+  assert.match(csp, /^default-src 'none'; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; /);
   assert.match(csp, /img-src 'self' https:\/\/m\.media-amazon\.com https:\/\/images-na\.ssl-images-amazon\.com https:\/\/images-eu\.ssl-images-amazon\.com https:\/\/cdn\.shopify\.com;/);
   assert.match(csp, /connect-src 'self' https:\/\/kcls\.bibliocommons\.com /);
 });
