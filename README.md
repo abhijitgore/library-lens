@@ -144,7 +144,7 @@ Local notes, historical proposals, Chrome Web Store submission materials, downlo
 ## Contributors
 
 - Abhijit Gore — project creator and maintainer.
-- OpenAI Codex — AI assistance with development and documentation.
+- OpenAI Codex and Claude Code — AI assistance with development and documentation.
 
 Library Lens is licensed under the [PolyForm Strict License 1.0.0](LICENSE.md). See the notice at the top of this README.
 
