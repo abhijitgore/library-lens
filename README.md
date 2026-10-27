@@ -1,5 +1,7 @@
 # Library Lens
 
+**License:** [PolyForm Strict 1.0.0](LICENSE.md). You can read and use Library Lens for noncommercial purposes. You cannot redistribute it, modify it, or use it commercially. Copyright © 2026 Abhijit Gore.
+
 Check a book at your libraries from its Amazon, Barnes & Noble, or Goodreads page. Open the library website to place a hold or request a purchase.
 
 ![Library Lens on an Amazon book page, with numbered arrows showing the extension icon, library availability, and Place hold link.](assets/library-lens-demo.png)
@@ -144,6 +146,6 @@ Local notes, historical proposals, Chrome Web Store submission materials, downlo
 - Abhijit Gore — project creator and maintainer.
 - OpenAI Codex — AI assistance with development and documentation.
 
-A project license has not been selected yet.
+Library Lens is licensed under the [PolyForm Strict License 1.0.0](LICENSE.md). See the notice at the top of this README.
 
 Version 0.11.24 is a local trial. It is not a Chrome Web Store release.
