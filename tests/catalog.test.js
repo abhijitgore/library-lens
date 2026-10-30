@@ -20,7 +20,7 @@ test('captured KCLS and SPL public search structures expose print availability w
 });
 
 test('Bay Area BiblioCommons catalogs use the supported public response format', async () => {
-  for (const library of ['sfpl', 'oakland', 'marin', 'smcl', 'sjpl']) {
+  for (const library of ['sfpl', 'oakland', 'marin', 'smcl', 'menlopark', 'sjpl']) {
     const parsed = parseCatalogHtml(await fixture(library === 'sjpl' ? 'smcl' : library));
     const result = assessResults({ title: 'Project Hail Mary', author: 'Andy Weir', isbn: '9780593135204' }, parsed);
     assert.equal(result.noResults, false, library);

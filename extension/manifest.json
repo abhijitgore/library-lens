@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Library Lens \u2014 Public Libraries",
   "short_name": "Library Lens",
-  "version": "0.11.24",
+  "version": "0.11.25",
   "description": "Click to check book availability at your selected public libraries.",
   "minimum_chrome_version": "120",
   "permissions": [
@@ -21,6 +21,7 @@
     "https://oaklandlibrary.bibliocommons.com/*",
     "https://marinet.bibliocommons.com/*",
     "https://smcl.bibliocommons.com/*",
+    "https://menlopark.bibliocommons.com/*",
     "https://sjpl.bibliocommons.com/*",
     "https://orbiscascade-washington.primo.exlibrisgroup.com/*",
     "https://evgcatalog.kcls.org/*",
@@ -46,6 +47,6 @@
     "128": "icons/book-128.png"
   },
   "content_security_policy": {
-    "extension_pages": "default-src 'none'; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; img-src 'self' https://m.media-amazon.com https://images-na.ssl-images-amazon.com https://images-eu.ssl-images-amazon.com https://cdn.shopify.com; connect-src 'self' https://kcls.bibliocommons.com https://seattle.bibliocommons.com https://sfpl.bibliocommons.com https://oaklandlibrary.bibliocommons.com https://marinet.bibliocommons.com https://smcl.bibliocommons.com https://sjpl.bibliocommons.com https://orbiscascade-washington.primo.exlibrisgroup.com https://lx2.loc.gov"
+    "extension_pages": "default-src 'none'; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; img-src 'self' https://m.media-amazon.com https://images-na.ssl-images-amazon.com https://images-eu.ssl-images-amazon.com https://cdn.shopify.com; connect-src 'self' https://kcls.bibliocommons.com https://seattle.bibliocommons.com https://sfpl.bibliocommons.com https://oaklandlibrary.bibliocommons.com https://marinet.bibliocommons.com https://smcl.bibliocommons.com https://menlopark.bibliocommons.com https://sjpl.bibliocommons.com https://orbiscascade-washington.primo.exlibrisgroup.com https://lx2.loc.gov"
   }
 }

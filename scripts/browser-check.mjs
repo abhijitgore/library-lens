@@ -80,7 +80,7 @@ try {
   assert.equal(await installationSettings.locator('#preferred-format').inputValue(), 'print');
   await installationSettings.close();
   console.log('PASS: fresh installation opens setup for ZIP and library selection');
-  const fixtures = Object.fromEntries(await Promise.all(['kcls', 'spl', 'sfpl', 'oakland', 'marin', 'smcl'].map(async name => [name, await readFile(resolve(root, `tests/fixtures/${name}.html`), 'utf8')])));
+  const fixtures = Object.fromEntries(await Promise.all(['kcls', 'spl', 'sfpl', 'oakland', 'marin', 'smcl', 'menlopark'].map(async name => [name, await readFile(resolve(root, `tests/fixtures/${name}.html`), 'utf8')])));
   fixtures.uw = await readFile(resolve(root, 'tests/fixtures/uw.json'), 'utf8');
   // Include misleading translations/editions to verify they never reach confirmed rows.
   const catalogJson = fixtures.kcls.match(/data-iso-key="_0">([\s\S]*?)<\/script>/)[1];
@@ -99,7 +99,7 @@ try {
       const state = globalThis.testNetwork;
       state.calls.push({ url: String(url), credentials: options.credentials, referrerPolicy: options.referrerPolicy });
       await new Promise(resolve => setTimeout(resolve, state.delay));
-      const library = ({'kcls.bibliocommons.com':'kcls','seattle.bibliocommons.com':'spl','sfpl.bibliocommons.com':'sfpl','oaklandlibrary.bibliocommons.com':'oakland','marinet.bibliocommons.com':'marin','smcl.bibliocommons.com':'smcl','orbiscascade-washington.primo.exlibrisgroup.com':'uw'})[new URL(url).hostname];
+      const library = ({'kcls.bibliocommons.com':'kcls','seattle.bibliocommons.com':'spl','sfpl.bibliocommons.com':'sfpl','oaklandlibrary.bibliocommons.com':'oakland','marinet.bibliocommons.com':'marin','smcl.bibliocommons.com':'smcl','menlopark.bibliocommons.com':'menlopark','orbiscascade-washington.primo.exlibrisgroup.com':'uw'})[new URL(url).hostname];
       const empty = '<script type="application/json" data-iso-key="_0">{"search":{"catalogSearch":{"results":[],"pagination":{"count":0,"pages":0}}},"entities":{"bibs":{}}}</script>';
       const emptyPrimo = '{"info":{"total":0},"docs":[]}';
       const body = library === 'uw' ? (state.missing ? emptyPrimo : state.fixtures.uw) : state.outage && library === 'spl' ? '<h1>Unavailable</h1>' : state.missing ? empty : state.fixtures[library];
@@ -136,11 +136,11 @@ try {
   ]);
   await setup.locator('#zip-code').fill('94129');
   await setup.getByRole('button', { name: 'Find libraries', exact: true }).click();
-  await setup.locator('#library-list .library-choice').nth(4).waitFor({ state: 'attached' });
-  assert.equal(await setup.locator('#library-list .library-choice').count(), 5);
+  await setup.locator('#library-list .library-choice').nth(5).waitFor({ state: 'attached' });
+  assert.equal(await setup.locator('#library-list .library-choice').count(), 6);
   assert.deepEqual(await setup.locator('#library-list .library-choice strong').allTextContents(), [
     'San Francisco Public Library (SFPL)', 'Marin County Free Library (MARINet)', 'San Mateo County Libraries (SMCL)',
-    'Oakland Public Library (OPL)', 'San José Public Library (SJPL)'
+    'Oakland Public Library (OPL)', 'Menlo Park Library (MPL)', 'San José Public Library (SJPL)'
   ]);
   const choices = setup.locator('#library-list input[type=checkbox]');
   await choices.nth(0).check(); await choices.nth(1).check(); await choices.nth(2).check();

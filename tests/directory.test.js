@@ -10,7 +10,7 @@ test('ZIP lookup ranks supported systems by the nearest reported branch without 
   const nearby = findLibrariesNearZip('94129', directory, Object.values(LIBRARIES));
   assert.deepEqual(nearby.slice(0, 4).map(library => library.id), ['sfpl', 'marin', 'smcl', 'oakland']);
   assert.ok(nearby[0].distanceMiles < 2);
-  assert.equal(nearby.length, 8);
+  assert.equal(nearby.length, 9);
   assert.equal(formatDistance(nearby[0].distanceMiles), '1.1 mi');
 });
 
@@ -25,6 +25,14 @@ test('95129 finds San José Public Library from its reported nearby branches', (
     .filter(library => library.distanceMiles != null && library.distanceMiles <= 75);
   assert.equal(nearby[0].id, 'sjpl');
   assert.ok(nearby[0].distanceMiles < 5);
+});
+
+test('94025 finds Menlo Park Library ahead of San Mateo County Libraries', () => {
+  const nearby = findLibrariesNearZip('94025', directory, Object.values(LIBRARIES))
+    .filter(library => library.distanceMiles != null && library.distanceMiles <= 75);
+  assert.deepEqual(nearby.slice(0, 2).map(library => library.id), ['menlopark', 'smcl']);
+  assert.ok(nearby[0].distanceMiles < 1);
+  assert.equal(directory.systems.menlopark.outlets.length, 2);
 });
 
 test('ZIP lookup rejects malformed and unmapped codes', () => {

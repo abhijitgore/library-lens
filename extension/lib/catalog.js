@@ -35,6 +35,11 @@ export const LIBRARIES = Object.freeze({
     origin: 'https://smcl.bibliocommons.com', permission: 'https://smcl.bibliocommons.com/*',
     fscsKey: 'CA0120', supportsPurchase: false
   }),
+  menlopark: Object.freeze({
+    id: 'menlopark', name: 'Menlo Park Library', short: 'MPL',
+    origin: 'https://menlopark.bibliocommons.com', permission: 'https://menlopark.bibliocommons.com/*',
+    fscsKey: 'CA0067', requestUrl: 'https://menlopark.gov/SuggestAPurchase', purchaseLinkOnly: true
+  }),
   sjpl: Object.freeze({
     id: 'sjpl', name: 'San José Public Library', short: 'SJPL',
     origin: 'https://sjpl.bibliocommons.com', permission: 'https://sjpl.bibliocommons.com/*',

@@ -19,7 +19,7 @@ Library Lens is an independent project. It is not affiliated with, endorsed by, 
 | Area | Supported library catalogs |
 | --- | --- |
 | Seattle area | King County Library System (KCLS), The Seattle Public Library (SPL), University of Washington Libraries (UW) |
-| Bay Area | San Francisco Public Library (SFPL), San José Public Library (SJPL), Oakland Public Library (OPL), MARINet, San Mateo County Libraries (SMCL) |
+| Bay Area | San Francisco Public Library (SFPL), San José Public Library (SJPL), Oakland Public Library (OPL), MARINet, San Mateo County Libraries (SMCL), Menlo Park Library (MPL) |
 
 Use a single book page on **amazon.com**, **bn.com** (Barnes & Noble, which opens barnesandnoble.com), or **goodreads.com**. Search results, book lists, and other websites are not supported.
 
@@ -33,7 +33,7 @@ Library Lens does not collect or store library usernames, card numbers, or passw
 2. Turn on **Developer mode**.
 3. Select **Load unpacked**. Choose this project's `extension` folder.
 4. To update an existing installation, select **Reload** on its extension card.
-5. Confirm version **0.11.24**. Pin Library Lens from Chrome's Extensions menu.
+5. Confirm version **0.11.25**. Pin Library Lens from Chrome's Extensions menu.
 
 An extension reload clears its temporary book data. Prepare a purchase request again after an update. To remove the extension, use Chrome's extension manager.
 
@@ -71,7 +71,7 @@ A Goodreads rating appears only when the open Goodreads page supplies it. No Goo
 A purchase action appears only when the catalog returns no results. Existing copies, including copies in use, lead to a hold instead.
 
 - **KCLS and SPL:** Select **Request purchase**. The official form opens. Sign in and choose a format if asked. Select the floating **Fill details** control beside the form. Review the fields and submit the request yourself.
-- **SJPL and UW:** Open the official purchase-suggestion page from the result. Complete the form yourself.
+- **SJPL, Menlo Park and UW:** Open the official purchase-suggestion page from the result. Complete the form yourself.
 - Other supported libraries provide catalog and hold links only.
 
 The KCLS/SPL helper fills book fields only. It leaves account, contact, pickup, fee, and loan choices to you. Adults is the default audience unless the page identifies another audience. Existing choices and conflicting text are kept.
@@ -164,4 +164,4 @@ Checks that passed at review time: `npm test` (67 tests), `npm run test:browser`
 
 Library Lens is licensed under the [PolyForm Strict License 1.0.0](LICENSE.md). See the notice at the top of this README.
 
-Version 0.11.24 is a local trial. It is not a Chrome Web Store release.
+Version 0.11.25 is a local trial. It is not a Chrome Web Store release.
