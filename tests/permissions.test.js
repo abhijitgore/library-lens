@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 test('shipping manifest is click-only and permits only fixed supported library hosts', async () => {
   const manifest = JSON.parse(await readFile(new URL('../extension/manifest.json', import.meta.url), 'utf8'));
   assert.deepEqual(manifest.permissions, ['activeTab', 'scripting', 'storage']);
-  assert.deepEqual(manifest.host_permissions.sort(), ['https://evgcatalog.kcls.org/*', 'https://kcls.bibliocommons.com/*', 'https://lx2.loc.gov/*', 'https://marinet.bibliocommons.com/*', 'https://oaklandlibrary.bibliocommons.com/*', 'https://orbiscascade-washington.primo.exlibrisgroup.com/*', 'https://seattle.bibliocommons.com/*', 'https://sfpl.bibliocommons.com/*', 'https://sjpl.bibliocommons.com/*', 'https://smcl.bibliocommons.com/*', 'https://www.spl.org/*']);
+  assert.deepEqual(manifest.host_permissions.sort(), ['https://evgcatalog.kcls.org/*', 'https://kcls.bibliocommons.com/*', 'https://lx2.loc.gov/*', 'https://marinet.bibliocommons.com/*', 'https://menlopark.bibliocommons.com/*', 'https://oaklandlibrary.bibliocommons.com/*', 'https://orbiscascade-washington.primo.exlibrisgroup.com/*', 'https://seattle.bibliocommons.com/*', 'https://sfpl.bibliocommons.com/*', 'https://sjpl.bibliocommons.com/*', 'https://smcl.bibliocommons.com/*', 'https://www.spl.org/*']);
   assert.equal(manifest.content_scripts, undefined);
   assert.deepEqual(manifest.options_ui, { page: 'settings.html', open_in_tab: true });
   assert.deepEqual(manifest.background, { service_worker: 'background.js', type: 'module' });

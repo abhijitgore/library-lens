@@ -8,7 +8,7 @@ extension = root / 'extension'
 manifest = json.loads((extension / 'manifest.json').read_text())
 assert manifest['manifest_version'] == 3
 assert set(manifest['permissions']) == {'activeTab', 'scripting', 'storage'}
-assert set(manifest['host_permissions']) == {'https://kcls.bibliocommons.com/*', 'https://seattle.bibliocommons.com/*', 'https://sfpl.bibliocommons.com/*', 'https://oaklandlibrary.bibliocommons.com/*', 'https://marinet.bibliocommons.com/*', 'https://smcl.bibliocommons.com/*', 'https://sjpl.bibliocommons.com/*', 'https://orbiscascade-washington.primo.exlibrisgroup.com/*', 'https://www.spl.org/*', 'https://lx2.loc.gov/*', 'https://evgcatalog.kcls.org/*'}
+assert set(manifest['host_permissions']) == {'https://kcls.bibliocommons.com/*', 'https://seattle.bibliocommons.com/*', 'https://sfpl.bibliocommons.com/*', 'https://oaklandlibrary.bibliocommons.com/*', 'https://marinet.bibliocommons.com/*', 'https://smcl.bibliocommons.com/*', 'https://menlopark.bibliocommons.com/*', 'https://sjpl.bibliocommons.com/*', 'https://orbiscascade-washington.primo.exlibrisgroup.com/*', 'https://www.spl.org/*', 'https://lx2.loc.gov/*', 'https://evgcatalog.kcls.org/*'}
 assert manifest['background'] == {'service_worker': 'background.js', 'type': 'module'}
 assert "img-src 'self' " in manifest['content_security_policy']['extension_pages'] and "connect-src 'self' " in manifest['content_security_policy']['extension_pages']
 for key in ['content_scripts', 'optional_host_permissions', 'externally_connectable', 'web_accessible_resources']:

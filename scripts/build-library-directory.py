@@ -18,6 +18,7 @@ SUPPORTED = {
     "marin": "CA0065",
     "smcl": "CA0120",
     "sjpl": "CA0115",
+    "menlopark": "CA0067",
 }
 CUSTOM_SYSTEMS = {
     # Academic catalogs are outside the IMLS public-library outlet dataset.
